@@ -47,3 +47,18 @@
         display: block;
     }
 }
+
+@page upright {
+    size: portrait;
+    page-orientation: upright;
+}
+
+@page rotate-left {
+    size: landscape;
+    page-orientation: rotate-left;
+}
+
+@page rotate-right {
+    size: landscape;
+    page-orientation: rotate-right;
+}
