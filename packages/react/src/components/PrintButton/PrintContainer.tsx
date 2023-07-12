@@ -20,7 +20,13 @@ export const PrintContext = React.createContext<{
   settings: Required<Settings>;
 }>({} as any);
 
-const PageContainer = ({ pageInfo }: { pageInfo: PrintPageRange }) => {
+const PageContainer = ({
+  pageInfo,
+  orientation,
+}: {
+  pageInfo: PrintPageRange;
+  orientation: string;
+}) => {
   const { context } = useContext(PrintContext);
   const [loading, setLoading] = useState(true);
   const [src, setSrc] = useState("");
@@ -40,7 +46,7 @@ const PageContainer = ({ pageInfo }: { pageInfo: PrintPageRange }) => {
   }, [context, pageInfo.range]);
 
   return (
-    <div className="fortune-printed-page">
+    <div className={`fortune-printed-page ${orientation}`}>
       {loading ? (
         <div className="fortune-print-img-loading">loading</div>
       ) : null}
@@ -67,7 +73,6 @@ export const SheetContainer = ({ sheetId }: { sheetId: string }) => {
     return computePrintPage(newContext, range);
   }, [newContext]);
 
-  const pageOrientation = orientation;
   return (
     <PrintContext.Provider
       value={useMemo(
@@ -75,12 +80,15 @@ export const SheetContainer = ({ sheetId }: { sheetId: string }) => {
         [newContext, settings]
       )}
     >
-      {/* 控制页面朝向 */}
-      <section className={pageOrientation}>
-        {printPages.map((page, index) => {
-          return <PageContainer pageInfo={page} key={index} />;
-        })}
-      </section>
+      {printPages.map((page, index) => {
+        return (
+          <PageContainer
+            pageInfo={page}
+            orientation={orientation}
+            key={index}
+          />
+        );
+      })}
     </PrintContext.Provider>
   );
 };
