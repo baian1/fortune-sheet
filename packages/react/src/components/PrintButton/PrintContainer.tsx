@@ -20,13 +20,7 @@ export const PrintContext = React.createContext<{
   settings: Required<Settings>;
 }>({} as any);
 
-const PageContainer = ({
-  pageInfo,
-  orientation,
-}: {
-  pageInfo: PrintPageRange;
-  orientation: string;
-}) => {
+const PageContainer = ({ pageInfo }: { pageInfo: PrintPageRange }) => {
   const { context } = useContext(PrintContext);
   const [loading, setLoading] = useState(true);
   const [src, setSrc] = useState("");
@@ -46,7 +40,7 @@ const PageContainer = ({
   }, [context, pageInfo.range]);
 
   return (
-    <div className={`fortune-printed-page ${orientation}`}>
+    <div className="fortune-printed-page">
       {loading ? (
         <div className="fortune-print-img-loading">loading</div>
       ) : null}
@@ -65,7 +59,7 @@ export const SheetContainer = ({ sheetId }: { sheetId: string }) => {
     });
   }, [context, settings, sheetId]);
 
-  const { printPages, orientation } = useMemo(() => {
+  const { printPages } = useMemo(() => {
     const range = getCellRange(newContext, newContext.currentSheetId, {
       type: "value",
     });
@@ -81,13 +75,7 @@ export const SheetContainer = ({ sheetId }: { sheetId: string }) => {
       )}
     >
       {printPages.map((page, index) => {
-        return (
-          <PageContainer
-            pageInfo={page}
-            orientation={orientation}
-            key={index}
-          />
-        );
+        return <PageContainer pageInfo={page} key={index} />;
       })}
     </PrintContext.Provider>
   );
