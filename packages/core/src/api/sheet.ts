@@ -64,7 +64,7 @@ export function initSheetRowlen(draftCtx: Context, index: number) {
     return;
   }
   const { defaultrowlen } = draftCtx;
-  const rowlen: Record<string, number> = {};
+  const rowlen: Record<string, number> = cfg.rowlen ?? {};
   sheetfile.data?.forEach((row, r) => {
     const customHeight = cfg.customHeight?.[r];
     if (customHeight || cfg?.rowlen?.[r]) {
@@ -80,7 +80,13 @@ export function initSheetRowlen(draftCtx: Context, index: number) {
         //     currentRowLen = cfg["rowlen"][r];
         // }
 
-        const cellWidth = cfg.columnlen?.[c] || draftCtx.defaultcollen;
+        let cellWidth = cfg.columnlen?.[c] || draftCtx.defaultcollen;
+        // mergedCell
+        if (cell.mc?.cs) {
+          _.range(1, cell.mc.cs).forEach((offsetC) => {
+            cellWidth += cfg.columnlen?.[c + offsetC] || draftCtx.defaultcollen;
+          });
+        }
 
         const textInfo = renderCtx
           ? getCellTextInfo(cell, renderCtx, draftCtx, {
