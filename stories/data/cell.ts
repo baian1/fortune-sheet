@@ -6050,4 +6050,11 @@ const data = {
   scrollTop: 0,
 };
 
+export const autoSizeCellHeight = {
+  name: "auto row height",
+  status: 0,
+  celldata: [{ r: 0, c: 0, v: { v: "line1       line2      line3", tb: "2" } }],
+  config: {},
+};
+
 export default data;
